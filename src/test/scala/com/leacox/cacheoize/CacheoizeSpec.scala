@@ -14,7 +14,9 @@ class CacheoizeSpec extends FunSpec with MockitoSugar with ShouldMatchers {
         a + b
       }
 
-      lazy val cachedDoStuff = Cacheoize(doStuff)
+      type Params = (String, String)
+      lazy val cachedDoStuff = Cacheoize(TTLCache[Params, String](10000))(doStuff)
+      //lazy val cachedDoStuff = Cacheoize(() => TTLCache(10000))(doStuff)
 
       System.out.println(cachedDoStuff("hello", "world"))
       System.out.println(cachedDoStuff("hello", "world"))
