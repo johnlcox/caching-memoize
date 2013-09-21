@@ -1,20 +1,16 @@
 package com.leacox.cacheoize
 
 import scala.collection.mutable
-import java.util.concurrent.TimeUnit
 
 /**
  * @author John Leacox
  */
-class TTLCache[K, V](timeToLiveMinutes: Long) extends Cache[K, V] {
-  private[this] val timeToLiveMillis = TimeUnit.MINUTES.toMillis(timeToLiveMinutes)
-  private[this] val cache = mutable.Map.empty[K, (Long, V)]
-
+class TTLCache[K, V](timeToLive: Long, cache: mutable.Map[K, (Long, V)])(clock: () => Long) extends Cache[K, V] {
   override def get(key: K) = cache.get(key) match {
     case None => None
     case Some(v) => v match {
       case (expiration, value) => {
-        if (expiration < System.currentTimeMillis) {
+        if (expiration < clock()) {
           cache.remove(key)
           None
         }
@@ -24,7 +20,14 @@ class TTLCache[K, V](timeToLiveMinutes: Long) extends Cache[K, V] {
   }
 
   override def put(key: K, value: V) = synchronized {
-    val now = System.currentTimeMillis
-    cache.put(key, (now + timeToLiveMillis, value))
+    val now = clock()
+    cache.put(key, (now + timeToLive, value))
+  }
+}
+
+object TTLCache {
+  def apply[K, V](timeToLive: Long, clock: () => Long = () => System.currentTimeMillis,
+                  backingMap: mutable.Map[K, (Long, V)] = mutable.Map.empty[K, (Long, V)]) = {
+    new TTLCache(timeToLive, backingMap)(clock)
   }
 }
