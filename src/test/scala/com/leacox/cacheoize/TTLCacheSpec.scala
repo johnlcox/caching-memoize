@@ -5,6 +5,7 @@ import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.mock.MockitoSugar
 import org.mockito.Mockito.{verify, when}
 import scala.collection.mutable
+import com.leacox.memoize.cache.TTLCache
 
 /**
  * @author John Leacox

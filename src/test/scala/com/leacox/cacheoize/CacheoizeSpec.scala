@@ -3,6 +3,7 @@ package com.leacox.cacheoize
 import org.scalatest.FunSpec
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.matchers.ShouldMatchers
+import com.leacox.memoize.cache.TTLCache
 
 /**
  * @author John Leacox

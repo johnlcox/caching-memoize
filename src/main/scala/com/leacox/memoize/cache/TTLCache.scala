@@ -1,4 +1,4 @@
-package com.leacox.cacheoize
+package com.leacox.memoize.cache
 
 import scala.collection.mutable
 
@@ -6,15 +6,17 @@ import scala.collection.mutable
  * @author John Leacox
  */
 class TTLCache[K, V](timeToLive: Long, cache: mutable.Map[K, (Long, V)])(clock: () => Long) extends Cache[K, V] {
-  override def get(key: K) = cache.get(key) match {
-    case None => None
-    case Some(v) => v match {
-      case (expiration, value) => {
-        if (expiration < clock()) {
-          cache.remove(key)
-          None
+  override def get(key: K) = synchronized {
+    cache.get(key) match {
+      case None => None
+      case Some(v) => v match {
+        case (expiration, value) => {
+          if (expiration < clock()) {
+            cache.remove(key)
+            None
+          }
+          else Some(value)
         }
-        else Some(value)
       }
     }
   }

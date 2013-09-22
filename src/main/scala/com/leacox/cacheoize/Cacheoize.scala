@@ -1,5 +1,7 @@
 package com.leacox.cacheoize
 
+import com.leacox.memoize.cache.Cache
+
 
 /**
  * @author John Leacox
