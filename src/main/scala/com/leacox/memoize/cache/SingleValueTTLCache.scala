@@ -1,7 +1,5 @@
 package com.leacox.memoize.cache
 
-import scala.collection.mutable
-
 /**
  * @author John Leacox
  */
