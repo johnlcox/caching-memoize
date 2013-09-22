@@ -1,4 +1,4 @@
-package com.leacox.cacheoize
+package com.leacox.memoize.cache
 
 import org.scalatest.FunSpec
 import org.scalatest.matchers.ShouldMatchers
