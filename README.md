@@ -1,2 +1,2 @@
-cacheoize
-=========
+caching-memoize
+===============
